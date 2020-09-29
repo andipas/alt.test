@@ -22,7 +22,7 @@ class ParserController extends Controller
                 $postService = new PostStorageService();
 
                 $response = $parserService->parse($model->url);
-                $post = $postService->create($response);
+                $post = $postService->createFromParser($response);
 
                 Yii::$app->session->setFlash('success', 'Данные получены успешно из '.$model->url);
                 return $this->redirect(['/post/view', 'id' => $post->id]);

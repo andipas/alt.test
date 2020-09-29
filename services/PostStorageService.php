@@ -10,18 +10,14 @@ use Yii;
 
 class PostStorageService
 {
-    private $error = '';
-
     /**
      * @param  ParserResponseDto  $dto
      * @return Post
      * @throws \yii\base\Exception
      */
-    public function create(ParserResponseDto $dto) : Post
+    public function createFromParser(ParserResponseDto $dto) : Post
     {
         $transaction = Yii::$app->db->beginTransaction();
-
-        $this->error = '';
 
         try {
             $post = new Post();
@@ -46,10 +42,5 @@ class PostStorageService
             $transaction->rollBack();
             throw new \yii\base\Exception($exception->getMessage());
         }
-    }
-
-    public function getError()
-    {
-        return $this->error;
     }
 }

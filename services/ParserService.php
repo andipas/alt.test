@@ -2,29 +2,34 @@
 
 namespace app\services;
 
+use app\models\ParserConfig;
 use app\services\providers\RbkProvider;
+use app\services\providers\TassProvider;
 use yii\base\Exception;
 
 class ParserService
 {
-    const TYPE_RBK = 'rbk';
-
-    private $url;
-
-    public function parse($url)
+    /**
+     * @param $url
+     * @return ParserResponseDto
+     * @throws Exception
+     * @throws providers\NotFindDataException
+     */
+    public function parse($url) : ParserResponseDto
     {
-        $this->url = $url;
+        $type = ParserConfig::getTypeByUrl($url);
 
-        switch ($this->getType()){
-            case self::TYPE_RBK:
-                return (new RbkProvider())->parse($url);
+        if(!$type){
+            throw new Exception('Неизвестный источник для парсинга');
         }
 
-        throw new Exception('Неизвестный источник для парсинга');
+        switch ($type){
+            case ParserConfig::TYPE_RBK:
+                return (new RbkProvider())->parse($url);
+
+            case ParserConfig::TYPE_TASS:
+                return (new TassProvider())->parse($url);
+        }
     }
 
-    private function getType()
-    {
-        return self::TYPE_RBK;
-    }
 }

@@ -2,12 +2,13 @@
 
 namespace app\services\providers;
 
+
 use app\services\ParserResponseDto;
 use GuzzleHttp\Client;
 
-class RbkProvider implements ProviderInterface
+class TassProvider implements ProviderInterface
 {
-    public function parse($url) : ParserResponseDto
+    public function parse($url): ParserResponseDto
     {
         $dto = new ParserResponseDto();
         $dto->parse_url = $url;
@@ -20,8 +21,8 @@ class RbkProvider implements ProviderInterface
 
         $document = \phpQuery::newDocumentHTML($body);
 
-        $dto->title = $document->find("div.article h1")->text();
-        $dto->body = $document->find("div.article .article__text")->html();
+        $dto->title = $document->find("#news h1")->text();
+        $dto->body = $document->find("#news .text-content")->html();
 
         if(!$dto->title || !$dto->body){
             throw new NotFindDataException('Не удалось получить данные');
@@ -29,4 +30,5 @@ class RbkProvider implements ProviderInterface
 
         return $dto;
     }
+
 }
