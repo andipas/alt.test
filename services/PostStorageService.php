@@ -3,6 +3,7 @@
 namespace app\services;
 
 
+use app\models\Image;
 use app\models\Post;
 use yii\db\Exception;
 use yii\db\Expression;
@@ -42,5 +43,16 @@ class PostStorageService
             $transaction->rollBack();
             throw new \yii\base\Exception($exception->getMessage());
         }
+    }
+
+    public function delete(Post $post)
+    {
+        foreach ($post->images as $image){
+            $image->unlinkFile();
+        }
+
+        @unlink(Image::getUploadDir($post->id));
+
+        $post->delete();
     }
 }

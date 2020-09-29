@@ -12,13 +12,15 @@ class MainMenu
         $items = [
             ['label' => 'Главаная', 'url' => ['/site/index']],
             //['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Контакты', 'url' => ['/site/contact']],
+            //['label' => 'Контакты', 'url' => ['/site/contact']],
         ];
 
         if(Yii::$app->user->isGuest){
             $items[] = ['label' => 'Вход', 'url' => ['/site/login']];
         } else {
-            $items[] = ['label' => 'Новости', 'url' => ['/post/index']];
+            if(UserHelper::isAdmin()){
+                $items[] = ['label' => 'Админка', 'url' => ['/post/index']];
+            }
 
             $items[] =
                 '<li>'

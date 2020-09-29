@@ -47,12 +47,12 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
-            'body' => 'Body',
+            'title' => 'Заголовок',
+            'body' => 'Текст',
             'parse_url' => 'Parse Url',
-            'parsed_at' => 'Parsed At',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'parsed_at' => 'Дата парсинга',
+            'created_at' => 'Дата создания',
+            'updated_at' => 'Дата обновления',
         ];
     }
 

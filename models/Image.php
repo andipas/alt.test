@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\FileHelper;
 
 /**
  * This is the model class for table "{{%image}}".
@@ -61,5 +62,37 @@ class Image extends \yii\db\ActiveRecord
     public function getPost()
     {
         return $this->hasOne(Post::className(), ['id' => 'post_id']);
+    }
+
+    public static function getUploadDir($postId)
+    {
+        $dir = Yii::getAlias('@webroot/uploads');
+        $dir .= DIRECTORY_SEPARATOR.$postId;
+
+        if(!is_dir($dir)){
+            FileHelper::createDirectory($dir);
+        }
+
+        return $dir;
+    }
+
+    public function getFilePath()
+    {
+        return self::getUploadDir($this->post_id).DIRECTORY_SEPARATOR.$this->name;
+    }
+
+    public function unlinkFile()
+    {
+        $file = $this->getFilePath();
+        if(is_file($file)){
+            return unlink($file);
+        }
+
+        return null;
+    }
+
+    public function getFileUrl()
+    {
+        return Yii::getAlias('@web/uploads').'/'.$this->post_id.'/'.$this->name;
     }
 }

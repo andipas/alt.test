@@ -33,7 +33,7 @@ class ParserConfig
             $arr[] = Html::a($name, $config['url'], ['target' => '_blank']);
         }
 
-        return implode(', ', $arr);
+        return implode(' или ', $arr);
     }
 
     public static function getTypeByUrl($url)

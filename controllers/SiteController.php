@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\helpers\UserHelper;
+use app\models\PostSearch;
 use GuzzleHttp\Client;
 use Yii;
 use yii\filters\AccessControl;
@@ -62,7 +64,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $searchModel = new PostSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -78,6 +86,9 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            if(UserHelper::isAdmin()){
+                return $this->redirect(['/post/index']);
+            }
             return $this->goBack();
         }
 
@@ -125,34 +136,5 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
-    }
-
-    public function actionTest()
-    {
-        // создаем экземпляр класса
-        $client = new Client();
-        // отправляем запрос к странице Яндекса
-        $res = $client->request('GET', 'http://www.yandex.ru');
-        // получаем данные между открывающим и закрывающим тегами body
-        $body = $res->getBody();
-        // подключаем phpQuery
-        $document = \phpQuery::newDocumentHTML($body);
-        // получаем список новостей
-        $news = $document->find("ol.news__list");
-        // выполняем проход циклом по списку
-//        foreach ($news as $elem) {
-//            //pq аналог $ в jQuery
-//            $pq = pq($elem);
-//            // удалим первую новость в списке
-//            $pq->find('li.b-news-list__item:first')->remove();
-//            // выполним поиск в скиске ссылок
-//            $tags = $pq->find('li.b-news-list__item a');
-//            // добавим ковычки в начало и в конец предложения
-//            $tags->append('" ')->prepend(' "'); //
-//            // добавим свой класс к последней новости списка
-//            $pq->find('li.b-news-list__item:last')->addClass('my_last_class');
-//        }
-        // вывод списка новостей яндекса с главной страницы в представление
-        return $this->render('test', ['news' => $news]);
     }
 }

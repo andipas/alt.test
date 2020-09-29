@@ -23,6 +23,13 @@ class RbkProvider implements ProviderInterface
         $dto->title = $document->find("div.article h1")->text();
         $dto->body = $document->find("div.article .article__text")->html();
 
+        $images = $document->find("div.article img");
+
+        foreach ($images as $image){
+            $pq = pq($image);
+            $dto->images[] = $pq->attr('src');
+        }
+
         if(!$dto->title || !$dto->body){
             throw new NotFindDataException('Не удалось получить данные');
         }

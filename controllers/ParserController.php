@@ -7,10 +7,9 @@ use app\models\ParserForm;
 use app\services\ParserService;
 use app\services\PostStorageService;
 use yii\base\Exception;
-use yii\web\Controller;
 use Yii;
 
-class ParserController extends Controller
+class ParserController extends BackendController
 {
     public function actionCreate()
     {
