@@ -32,6 +32,10 @@ INSTALL
 
 1) git clone
 
-2) edit the file config/db.php with real data
+2) composer update
 
-3) yii migrate
+3) edit the file config/db.php with real data
+
+4) yii migrate
+
+5) done!
